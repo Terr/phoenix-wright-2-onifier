@@ -1,0 +1,61 @@
+name: create-release
+run-name: Creating release for tag ${{ github.ref_name }}
+
+on:
+  push:
+    tags:
+      - v**
+
+jobs:
+  create-release:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, windows-latest]
+        python-version: ["3.8"]
+        poetry-version: ["1.6.1"]
+        include:
+          - os: ubuntu-20.04
+            platform: linux
+            binary_extension:
+          - os: windows-latest
+            platform: windows
+            binary_extension: .exe
+
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+
+      - name: Configure Poetry to store virtualenv in source directory so it can be cached
+        run: |
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+
+      - uses: actions/cache@v3
+        name: Cache project's Python dependencies
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: Install dependencies
+        run: poetry install --with=dev
+
+      - name: Create ${{ matrix.platform }} binary
+        run: poetry run pyinstaller -F pw2-onifier.py
+
+      - name: Add ${{ matrix.platform }} binary to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/pw2-onifier${{ matrix.binary_extension }}
