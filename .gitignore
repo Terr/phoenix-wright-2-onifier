@@ -1,0 +1,4 @@
+build/
+dist/
+*.nds
+*.py[c|d|o]
