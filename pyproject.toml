@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pw2-onifier"
+version = "0.1.0"
+description = "Improves a Phoenix Wright 2 ROM by copying the better music from a Phoenix Wright 1 ROM. Take that!"
+authors = ["Terr <git@terr.nl>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+ndspy = "4.1.0"
+python = "^3.8,<3.13"
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^5.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
