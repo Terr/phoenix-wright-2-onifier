@@ -55,6 +55,15 @@ def onify(pw1_rom_path: str, pw2_rom_path: str, output_path: str):
 def copy_sound_files(mapping: dict, source_sdat: SDAT, destination_sdat: SDAT):
     """Copies the sound files from the source SDAT to the destination SDAT."""
 
+    # Make a complete copy of WAVE_AGB_BGM, used by some PW1 songs, but don't
+    # overwrite PW2's version. Instead, just point the PW1 song banks to use
+    # PW1's WAVE_AGB_BGM.
+    pw1_agb_bgm = findInNamedList(source_sdat.waveArchives, "WAVE_AGB_BGM")
+    destination_sdat.waveArchives.append(("WAVE_AGB_BGM_PW1", pw1_agb_bgm))
+    pw1_agb_bgm_index = indexInNamedList(
+        destination_sdat.waveArchives, "WAVE_AGB_BGM_PW1"
+    )
+
     for from_name, to_name in mapping.items():
         wave = findInNamedList(source_sdat.waveArchives, f"WAVE_{from_name}")
         setInNamedList(destination_sdat.waveArchives, f"WAVE_{to_name}", wave)
@@ -64,6 +73,9 @@ def copy_sound_files(mapping: dict, source_sdat: SDAT, destination_sdat: SDAT):
         bank.waveArchiveIDs = findInNamedList(
             destination_sdat.banks, f"BANK_{to_name}"
         ).waveArchiveIDs
+        # If the bank uses WAVE_AGB_BGM, point it to PW1's version
+        if bank.waveArchiveIDs[0] == 0:
+            bank.waveArchiveIDs[0] = pw1_agb_bgm_index
         setInNamedList(destination_sdat.banks, f"BANK_{to_name}", bank)
 
         seq = findInNamedList(source_sdat.sequences, from_name)
