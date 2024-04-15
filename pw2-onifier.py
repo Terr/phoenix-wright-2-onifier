@@ -19,6 +19,7 @@ MUSIC_MAPPING = {
     "BGM013": "BGM069",  # Court
     "BGM010": "BGM072",  # Cross-Examination Moderato
     "BGM011": "BGM073",  # Cross-Examination Allegro
+    "BGM004": "BGM070",  # Objection
     "BGM002": "BGM074",  # Pursuit
     "BGM003": "BGM075",  # Pursuit variation
     "BGM016": "BGM080",  # Save prompt
