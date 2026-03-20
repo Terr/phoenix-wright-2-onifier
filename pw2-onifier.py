@@ -122,8 +122,10 @@ def copy_sound_files(mapping: dict, source_sdat: SDAT, destination_sdat: SDAT):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        prog='"Phoenix Wright 2: Justice For All" Onifier',
-        description="Improves a Phoenix Wright 2 ROM by copying the better music from a Phoenix Wright 1 ROM. Take that!",
+        description=(
+            '"Phoenix Wright 2: Justice For All" Onifier: improves a Phoenix Wright 2 ROM by copying the '
+            "better music from a Phoenix Wright 1 ROM. Take that!"
+        ),
     )
     parser.add_argument("pw1_path", help="Path to Phoenix Wright 1 ROM")
     parser.add_argument("pw2_path", help="Path to Phoenix Wright 2 ROM")
